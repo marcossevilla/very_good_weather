@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-import '../enums/location_type.dart';
+import '../../enums/location_type.dart';
 
 part 'weather_response.freezed.dart';
 part 'weather_response.g.dart';
