@@ -12,6 +12,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
 import 'package:very_good_weather/app/app_config.dart';
 import 'package:very_good_weather/l10n/l10n.dart';
+import 'package:very_good_weather/search/search.dart';
 import 'package:very_good_weather/weather/weather.dart';
 
 class App extends StatelessWidget {
@@ -46,6 +47,35 @@ class WeatherApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => SearchCubit(
+            searchLocation: SearchLocation(
+              repository: context.read<WeatherRepository>(),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => WeatherCubit(
+            getWeather: GetWeather(
+              repository: context.read<WeatherRepository>(),
+            ),
+          ),
+        ),
+      ],
+      child: const AppView(),
+    );
+  }
+}
+
+class AppView extends StatelessWidget {
+  const AppView({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
         accentColor: const Color(0xFF13B9FF),
@@ -56,7 +86,7 @@ class WeatherApp extends StatelessWidget {
         GlobalMaterialLocalizations.delegate,
       ],
       supportedLocales: AppLocalizations.supportedLocales,
-      home: const WeatherPage(),
+      home: const SearchPage(),
     );
   }
 }

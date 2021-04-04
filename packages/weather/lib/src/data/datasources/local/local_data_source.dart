@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:errors/errors.dart' show CacheException;
 import 'package:hive/hive.dart' show Box;
-import '../../domain/domain.dart' show WeatherResponse;
+import '../../../domain/domain.dart' show WeatherResponse;
 
 /// Key to keep track of last cached weather
 const kCachedBoxKey = 'WEATHER_CACHE';

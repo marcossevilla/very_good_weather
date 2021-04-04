@@ -5,8 +5,8 @@ import 'package:dartz/dartz.dart';
 import '../../domain/domain.dart'
     show IWeatherRepository, LocationResponse, WeatherResponse;
 
-import '../datasources/local_data_source.dart' show IWeatherLocalDataSource;
-import '../datasources/remote_data_source.dart' show IWeatherRemoteDataSource;
+import '../datasources/local/local_data_source.dart';
+import '../datasources/remote/remote_data_source.dart';
 
 /// Weather repository implementation
 class WeatherRepository implements IWeatherRepository {

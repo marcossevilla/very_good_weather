@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart' show Dio;
+import 'package:dio/dio.dart';
 import 'package:errors/errors.dart' show ServerException;
-import '../../domain/domain.dart' show LocationResponse, WeatherResponse;
+import '../../../domain/domain.dart' show LocationResponse, WeatherResponse;
 
 abstract class IWeatherRemoteDataSource {
   Future<List<LocationResponse>> searchLocation(String location);
@@ -29,10 +27,9 @@ class WeatherRemoteDataSource implements IWeatherRemoteDataSource {
 
       if (response.statusCode != 200) throw ServerException();
 
-      final decode = json.decode(response.data) as List;
       final locations = <LocationResponse>[];
 
-      for (final location in decode) {
+      for (final location in response.data) {
         locations.add(LocationResponse.fromJson(location));
       }
 
@@ -48,9 +45,7 @@ class WeatherRemoteDataSource implements IWeatherRemoteDataSource {
       final response = await _client.get('$_url/location/$locationId/');
 
       if (response.statusCode != 200) throw ServerException();
-
-      final decode = json.decode(response.data);
-      return WeatherResponse.fromJson(decode);
+      return WeatherResponse.fromJson(response.data);
     } catch (e) {
       throw ServerException();
     }

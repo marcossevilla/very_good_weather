@@ -13,7 +13,7 @@ class SliverText extends StatelessWidget {
     return SliverToBoxAdapter(
       child: Text(
         message,
-        style: Theme.of(context).textTheme.headline4,
+        style: Theme.of(context).textTheme.headline6,
         textAlign: TextAlign.center,
       ),
     );

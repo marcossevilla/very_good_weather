@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:very_good_weather/search/cubit/search_cubit.dart';
-import 'package:very_good_weather/search/widgets/sliver_text.dart';
-import 'package:very_good_weather/weather/weather.dart';
+import '../widgets/widgets.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({
@@ -20,35 +19,36 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final textController = TextEditingController();
 
+  void submitQuery() async {
+    final query = textController.text;
+    await context.read<SearchCubit>().searchLocation(query);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => SearchCubit(
-        searchLocation: SearchLocation(
-          repository: context.read<WeatherRepository>(),
-        ),
-      ),
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            const SliverAppBar(title: Text('Input a location')),
-            SliverToBoxAdapter(
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          const SliverAppBar(title: Text('Input a location')),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
               child: TextField(controller: textController),
             ),
-            const SearchConsumer(),
-          ],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          child: const Icon(Icons.search),
-        ),
+          ),
+          const SearchBody(),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: submitQuery,
+        child: const Icon(Icons.search),
       ),
     );
   }
 }
 
-class SearchConsumer extends StatelessWidget {
-  const SearchConsumer({
+class SearchBody extends StatelessWidget {
+  const SearchBody({
     Key? key,
   }) : super(key: key);
 
@@ -60,45 +60,13 @@ class SearchConsumer extends StatelessWidget {
           initial: () => const SliverText(
             message: 'Search for some locations!',
           ),
-          loading: () => const Loader(),
+          loading: () => const SliverLoader(),
           loaded: (locations) => LocationsList(locations: locations),
           error: (error) => SliverText(
             message: error ?? 'Oops, something went wrong!',
           ),
         );
       },
-    );
-  }
-}
-
-class Loader extends StatelessWidget {
-  const Loader({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return const SliverToBoxAdapter(
-      child: Center(child: CircularProgressIndicator()),
-    );
-  }
-}
-
-class LocationsList extends StatelessWidget {
-  const LocationsList({
-    Key? key,
-    required this.locations,
-  }) : super(key: key);
-
-  final List<LocationResponse> locations;
-
-  @override
-  Widget build(BuildContext context) {
-    return SliverList(
-      delegate: SliverChildListDelegate([
-        for (final location in locations)
-          ListTile(title: Text(location.title ?? '')),
-      ]),
     );
   }
 }
