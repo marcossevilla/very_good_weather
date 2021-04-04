@@ -5,13 +5,44 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:hive/hive.dart';
+import 'package:very_good_weather/app/app_config.dart';
 import 'package:very_good_weather/l10n/l10n.dart';
-import 'package:very_good_weather/weather/view/weather_page.dart';
+import 'package:very_good_weather/weather/weather.dart';
 
 class App extends StatelessWidget {
-  const App({Key? key}) : super(key: key);
+  const App({
+    Key? key,
+    required this.box,
+  }) : super(key: key);
+
+  final Box box;
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiRepositoryProvider(
+      providers: [
+        RepositoryProvider(
+          create: (_) => WeatherRepository(
+            localDataSource: WeatherLocalDataSource(prefs: box),
+            remoteDataSource: WeatherRemoteDataSource(
+              client: Dio(),
+              url: AppConfig.apiUrl,
+            ),
+          ),
+        ),
+      ],
+      child: const WeatherApp(),
+    );
+  }
+}
+
+class WeatherApp extends StatelessWidget {
+  const WeatherApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

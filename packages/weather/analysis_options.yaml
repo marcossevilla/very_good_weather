@@ -8,7 +8,8 @@ linter:
   rules:
     public_member_api_docs: false
 
+# Exclude Freezed files from static analysis
 analyzer:
   exclude:
-    - "*/.g.dart"
-    - "*/.freezed.dart"
+    - "**/*.freezed.dart"
+    - "**/*.g.dart"
