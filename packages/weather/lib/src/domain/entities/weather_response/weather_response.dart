@@ -6,18 +6,18 @@ part 'weather_response.g.dart';
 @JsonSerializable()
 class WeatherResponse extends Equatable {
   WeatherResponse({
-    this.consolidatedWeather,
-    this.time,
-    this.sunRise,
-    this.sunSet,
-    this.timezoneName,
-    this.parent,
-    this.sources,
-    this.title,
-    this.locationType,
-    this.woeid,
-    this.lattLong,
-    this.timezone,
+    required this.consolidatedWeather,
+    required this.time,
+    required this.sunRise,
+    required this.sunSet,
+    required this.timezoneName,
+    required this.parent,
+    required this.sources,
+    required this.title,
+    required this.locationType,
+    required this.woeid,
+    required this.lattLong,
+    required this.timezone,
   });
 
   factory WeatherResponse.fromJson(Map<String, dynamic> json) =>
@@ -25,18 +25,18 @@ class WeatherResponse extends Equatable {
 
   Map<String, dynamic> toJson() => _$WeatherResponseToJson(this);
 
-  final List<ConsolidatedWeather>? consolidatedWeather;
-  final DateTime? time;
-  final DateTime? sunRise;
-  final DateTime? sunSet;
-  final String? timezoneName;
-  final Parent? parent;
-  final List<Source>? sources;
-  final String? title;
-  final String? locationType;
-  final int? woeid;
-  final String? lattLong;
-  final String? timezone;
+  final List<ConsolidatedWeather> consolidatedWeather;
+  final DateTime time;
+  final DateTime sunRise;
+  final DateTime sunSet;
+  final String timezoneName;
+  final Parent parent;
+  final List<Source> sources;
+  final String title;
+  final String locationType;
+  final int woeid;
+  final String lattLong;
+  final String timezone;
 
   WeatherResponse copyWith({
     List<ConsolidatedWeather>? consolidatedWeather,
@@ -68,7 +68,7 @@ class WeatherResponse extends Equatable {
       );
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         consolidatedWeather,
         time,
         sunRise,
@@ -87,21 +87,21 @@ class WeatherResponse extends Equatable {
 @JsonSerializable()
 class ConsolidatedWeather extends Equatable {
   ConsolidatedWeather({
-    this.id,
-    this.weatherStateName,
-    this.weatherStateAbbr,
-    this.windDirectionCompass,
-    this.created,
-    this.applicableDate,
-    this.minTemp,
-    this.maxTemp,
-    this.theTemp,
-    this.windSpeed,
-    this.windDirection,
-    this.airPressure,
-    this.humidity,
-    this.visibility,
-    this.predictability,
+    required this.id,
+    required this.weatherStateName,
+    required this.weatherStateAbbr,
+    required this.windDirectionCompass,
+    required this.created,
+    required this.applicableDate,
+    required this.minTemp,
+    required this.maxTemp,
+    required this.theTemp,
+    required this.windSpeed,
+    required this.windDirection,
+    required this.airPressure,
+    required this.humidity,
+    required this.visibility,
+    required this.predictability,
   });
 
   factory ConsolidatedWeather.fromJson(Map<String, dynamic> json) =>
@@ -109,21 +109,21 @@ class ConsolidatedWeather extends Equatable {
 
   Map<String, dynamic> toJson() => _$ConsolidatedWeatherToJson(this);
 
-  final int? id;
-  final String? weatherStateName;
-  final String? weatherStateAbbr;
-  final String? windDirectionCompass;
-  final DateTime? created;
-  final DateTime? applicableDate;
-  final double? minTemp;
-  final double? maxTemp;
-  final double? theTemp;
-  final double? windSpeed;
-  final double? windDirection;
-  final double? airPressure;
-  final int? humidity;
-  final double? visibility;
-  final int? predictability;
+  final int id;
+  final String weatherStateName;
+  final String weatherStateAbbr;
+  final String windDirectionCompass;
+  final DateTime created;
+  final DateTime applicableDate;
+  final double minTemp;
+  final double maxTemp;
+  final double theTemp;
+  final double windSpeed;
+  final double windDirection;
+  final double airPressure;
+  final int humidity;
+  final double visibility;
+  final int predictability;
 
   ConsolidatedWeather copyWith({
     int? id,
@@ -161,7 +161,7 @@ class ConsolidatedWeather extends Equatable {
       );
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         id,
         weatherStateName,
         weatherStateAbbr,
@@ -183,20 +183,20 @@ class ConsolidatedWeather extends Equatable {
 @JsonSerializable()
 class Parent extends Equatable {
   Parent({
-    this.title,
-    this.locationType,
-    this.woeid,
-    this.lattLong,
+    required this.title,
+    required this.locationType,
+    required this.woeid,
+    required this.lattLong,
   });
 
   factory Parent.fromJson(Map<String, dynamic> json) => _$ParentFromJson(json);
 
   Map<String, dynamic> toJson() => _$ParentToJson(this);
 
-  final String? title;
-  final String? locationType;
-  final int? woeid;
-  final String? lattLong;
+  final String title;
+  final String locationType;
+  final int woeid;
+  final String lattLong;
 
   Parent copyWith({
     String? title,
@@ -205,14 +205,14 @@ class Parent extends Equatable {
     String? lattLong,
   }) =>
       Parent(
-        title: title ?? this.title,
-        locationType: locationType ?? this.locationType,
-        woeid: woeid ?? this.woeid,
-        lattLong: lattLong ?? this.lattLong,
+        title: this.title,
+        locationType: this.locationType,
+        woeid: this.woeid,
+        lattLong: this.lattLong,
       );
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         title,
         locationType,
         woeid,
@@ -223,20 +223,20 @@ class Parent extends Equatable {
 @JsonSerializable()
 class Source extends Equatable {
   Source({
-    this.title,
-    this.slug,
-    this.url,
-    this.crawlRate,
+    required this.title,
+    required this.slug,
+    required this.url,
+    required this.crawlRate,
   });
 
   factory Source.fromJson(Map<String, dynamic> json) => _$SourceFromJson(json);
 
   Map<String, dynamic> toJson() => _$SourceToJson(this);
 
-  final String? title;
-  final String? slug;
-  final String? url;
-  final int? crawlRate;
+  final String title;
+  final String slug;
+  final String url;
+  final int crawlRate;
 
   Source copyWith({
     String? title,
@@ -252,7 +252,7 @@ class Source extends Equatable {
       );
 
   @override
-  List<Object?> get props => [
+  List<Object> get props => [
         title,
         slug,
         url,

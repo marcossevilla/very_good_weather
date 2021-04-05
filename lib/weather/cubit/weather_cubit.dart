@@ -21,8 +21,15 @@ class WeatherCubit extends Cubit<WeatherState> {
     emit(
       result.fold(
         (error) => const WeatherState.error(),
-        (weather) => WeatherState.loaded(weather),
+        (weather) => WeatherState.loaded(weather, Temperature.celsius),
       ),
+    );
+  }
+
+  void changeTemperature(Temperature temperature) {
+    state.maybeWhen(
+      loaded: (weather, _) => emit(WeatherState.loaded(weather, temperature)),
+      orElse: () {},
     );
   }
 }

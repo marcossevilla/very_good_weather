@@ -8,11 +8,10 @@ part of 'location_response.dart';
 
 LocationResponse _$LocationResponseFromJson(Map<String, dynamic> json) {
   return LocationResponse(
-    title: json['title'] as String?,
-    locationType:
-        _$enumDecodeNullable(_$LocationTypeEnumMap, json['locationType']),
-    woeid: json['woeid'] as int?,
-    lattLong: json['lattLong'] as String?,
+    title: json['title'] as String,
+    locationType: _$enumDecode(_$LocationTypeEnumMap, json['locationType']),
+    woeid: json['woeid'] as int,
+    lattLong: json['lattLong'] as String,
   );
 }
 
@@ -48,17 +47,6 @@ K _$enumDecode<K, V>(
       return MapEntry(unknownValue, enumValues.values.first);
     },
   ).key;
-}
-
-K? _$enumDecodeNullable<K, V>(
-  Map<K, V> enumValues,
-  dynamic source, {
-  K? unknownValue,
-}) {
-  if (source == null) {
-    return null;
-  }
-  return _$enumDecode<K, V>(enumValues, source, unknownValue: unknownValue);
 }
 
 const _$LocationTypeEnumMap = {

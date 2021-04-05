@@ -18,10 +18,10 @@ class LocationsList extends StatelessWidget {
       delegate: SliverChildListDelegate([
         for (final location in locations)
           ListTile(
-            title: Text(location.title ?? ''),
+            title: Text(location.title),
             onTap: () async {
               final woeid = location.woeid;
-              unawaited(context.read<WeatherCubit>().getWeather(woeid!));
+              unawaited(context.read<WeatherCubit>().getWeather(woeid));
               await Navigator.of(context).push(WeatherPage.go());
             },
           ),

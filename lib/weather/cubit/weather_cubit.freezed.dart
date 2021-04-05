@@ -24,9 +24,10 @@ class _$WeatherStateTearOff {
     return const _Loading();
   }
 
-  _Loaded loaded(WeatherResponse weather) {
+  _Loaded loaded(WeatherResponse weather, Temperature temperature) {
     return _Loaded(
       weather,
+      temperature,
     );
   }
 
@@ -46,7 +47,8 @@ mixin _$WeatherState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(WeatherResponse weather) loaded,
+    required TResult Function(WeatherResponse weather, Temperature temperature)
+        loaded,
     required TResult Function(String? message) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -54,7 +56,7 @@ mixin _$WeatherState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(WeatherResponse weather)? loaded,
+    TResult Function(WeatherResponse weather, Temperature temperature)? loaded,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) =>
@@ -132,7 +134,8 @@ class _$_Initial implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(WeatherResponse weather) loaded,
+    required TResult Function(WeatherResponse weather, Temperature temperature)
+        loaded,
     required TResult Function(String? message) error,
   }) {
     return initial();
@@ -143,7 +146,7 @@ class _$_Initial implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(WeatherResponse weather)? loaded,
+    TResult Function(WeatherResponse weather, Temperature temperature)? loaded,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
@@ -222,7 +225,8 @@ class _$_Loading implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(WeatherResponse weather) loaded,
+    required TResult Function(WeatherResponse weather, Temperature temperature)
+        loaded,
     required TResult Function(String? message) error,
   }) {
     return loading();
@@ -233,7 +237,7 @@ class _$_Loading implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(WeatherResponse weather)? loaded,
+    TResult Function(WeatherResponse weather, Temperature temperature)? loaded,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
@@ -278,7 +282,7 @@ abstract class _Loading implements WeatherState {
 abstract class _$LoadedCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({WeatherResponse weather});
+  $Res call({WeatherResponse weather, Temperature temperature});
 }
 
 /// @nodoc
@@ -293,26 +297,33 @@ class __$LoadedCopyWithImpl<$Res> extends _$WeatherStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? weather = freezed,
+    Object? temperature = freezed,
   }) {
     return _then(_Loaded(
       weather == freezed
           ? _value.weather
           : weather // ignore: cast_nullable_to_non_nullable
               as WeatherResponse,
+      temperature == freezed
+          ? _value.temperature
+          : temperature // ignore: cast_nullable_to_non_nullable
+              as Temperature,
     ));
   }
 }
 
 /// @nodoc
 class _$_Loaded implements _Loaded {
-  const _$_Loaded(this.weather);
+  const _$_Loaded(this.weather, this.temperature);
 
   @override
   final WeatherResponse weather;
+  @override
+  final Temperature temperature;
 
   @override
   String toString() {
-    return 'WeatherState.loaded(weather: $weather)';
+    return 'WeatherState.loaded(weather: $weather, temperature: $temperature)';
   }
 
   @override
@@ -320,12 +331,18 @@ class _$_Loaded implements _Loaded {
     return identical(this, other) ||
         (other is _Loaded &&
             (identical(other.weather, weather) ||
-                const DeepCollectionEquality().equals(other.weather, weather)));
+                const DeepCollectionEquality()
+                    .equals(other.weather, weather)) &&
+            (identical(other.temperature, temperature) ||
+                const DeepCollectionEquality()
+                    .equals(other.temperature, temperature)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(weather);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(weather) ^
+      const DeepCollectionEquality().hash(temperature);
 
   @JsonKey(ignore: true)
   @override
@@ -337,10 +354,11 @@ class _$_Loaded implements _Loaded {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(WeatherResponse weather) loaded,
+    required TResult Function(WeatherResponse weather, Temperature temperature)
+        loaded,
     required TResult Function(String? message) error,
   }) {
-    return loaded(weather);
+    return loaded(weather, temperature);
   }
 
   @override
@@ -348,12 +366,12 @@ class _$_Loaded implements _Loaded {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(WeatherResponse weather)? loaded,
+    TResult Function(WeatherResponse weather, Temperature temperature)? loaded,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(weather);
+      return loaded(weather, temperature);
     }
     return orElse();
   }
@@ -386,9 +404,11 @@ class _$_Loaded implements _Loaded {
 }
 
 abstract class _Loaded implements WeatherState {
-  const factory _Loaded(WeatherResponse weather) = _$_Loaded;
+  const factory _Loaded(WeatherResponse weather, Temperature temperature) =
+      _$_Loaded;
 
   WeatherResponse get weather => throw _privateConstructorUsedError;
+  Temperature get temperature => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }
@@ -456,7 +476,8 @@ class _$_Error implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(WeatherResponse weather) loaded,
+    required TResult Function(WeatherResponse weather, Temperature temperature)
+        loaded,
     required TResult Function(String? message) error,
   }) {
     return error(message);
@@ -467,7 +488,7 @@ class _$_Error implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(WeatherResponse weather)? loaded,
+    TResult Function(WeatherResponse weather, Temperature temperature)? loaded,
     TResult Function(String? message)? error,
     required TResult orElse(),
   }) {
