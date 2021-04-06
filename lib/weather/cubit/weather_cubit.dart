@@ -1,4 +1,5 @@
 import 'package:bloc/bloc.dart';
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:weather/weather.dart';
 
@@ -27,9 +28,11 @@ class WeatherCubit extends Cubit<WeatherState> {
   }
 
   void changeTemperature(Temperature temperature) {
-    state.maybeWhen(
-      loaded: (weather, _) => emit(WeatherState.loaded(weather, temperature)),
-      orElse: () {},
+    emit(
+      state.maybeWhen(
+        loaded: (weather, _) => WeatherState.loaded(weather, temperature),
+        orElse: () => state,
+      ),
     );
   }
 }

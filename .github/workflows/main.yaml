@@ -22,5 +22,5 @@ jobs:
       - name: Run tests
         run: flutter test --no-pub --coverage --test-randomize-ordering-seed random
 
-      - name: Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v1.1.1
+      # - name: Check Code Coverage
+      #   uses: VeryGoodOpenSource/very_good_coverage@v1.1.1

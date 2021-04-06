@@ -31,19 +31,18 @@ class App extends StatelessWidget {
           create: (_) => WeatherRepository(
             localDataSource: WeatherLocalDataSource(prefs: box),
             remoteDataSource: WeatherRemoteDataSource(
-              client: Dio(),
-              url: AppConfig.apiUrl,
+              client: Dio(BaseOptions(baseUrl: AppConfig.apiUrl)),
             ),
           ),
         ),
       ],
-      child: const WeatherApp(),
+      child: const AppMultiBloc(),
     );
   }
 }
 
-class WeatherApp extends StatelessWidget {
-  const WeatherApp({Key? key}) : super(key: key);
+class AppMultiBloc extends StatelessWidget {
+  const AppMultiBloc({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +63,13 @@ class WeatherApp extends StatelessWidget {
           ),
         ),
       ],
-      child: const AppView(),
+      child: const AppCore(),
     );
   }
 }
 
-class AppView extends StatelessWidget {
-  const AppView({
+class AppCore extends StatelessWidget {
+  const AppCore({
     Key? key,
   }) : super(key: key);
 

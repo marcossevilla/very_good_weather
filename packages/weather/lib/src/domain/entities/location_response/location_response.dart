@@ -8,10 +8,10 @@ part 'location_response.g.dart';
 @JsonSerializable()
 class LocationResponse extends Equatable {
   LocationResponse({
-    required this.title,
-    required this.locationType,
     required this.woeid,
+    required this.title,
     required this.lattLong,
+    required this.locationType,
   });
 
   factory LocationResponse.fromJson(Map<String, dynamic> json) =>
@@ -19,29 +19,34 @@ class LocationResponse extends Equatable {
 
   Map<String, dynamic> toJson() => _$LocationResponseToJson(this);
 
-  final String title;
-  final LocationType locationType;
   final int woeid;
+
+  final String title;
+
+  @JsonKey(name: 'latt_long')
   final String lattLong;
 
+  @JsonKey(defaultValue: LocationType.city)
+  final LocationType locationType;
+
   LocationResponse copyWith({
-    required String title,
-    required LocationType locationType,
     required int woeid,
+    required String title,
     required String lattLong,
+    required LocationType locationType,
   }) =>
       LocationResponse(
-        title: this.title,
-        locationType: this.locationType,
         woeid: this.woeid,
+        title: this.title,
         lattLong: this.lattLong,
+        locationType: this.locationType,
       );
 
   @override
   List<Object> get props => [
-        title,
-        locationType,
         woeid,
+        title,
         lattLong,
+        locationType,
       ];
 }

@@ -10,18 +10,15 @@ abstract class IWeatherRemoteDataSource {
 class WeatherRemoteDataSource implements IWeatherRemoteDataSource {
   WeatherRemoteDataSource({
     required Dio client,
-    required String url,
-  })   : _client = client,
-        _url = url;
+  }) : _client = client;
 
   final Dio _client;
-  final String _url;
 
   @override
   Future<List<LocationResponse>> searchLocation(String location) async {
     try {
       final response = await _client.get(
-        '$_url/location/search/',
+        '/location/search/',
         queryParameters: {'query': location},
       );
 
@@ -42,8 +39,7 @@ class WeatherRemoteDataSource implements IWeatherRemoteDataSource {
   @override
   Future<WeatherResponse> getWeather(int locationId) async {
     try {
-      final response = await _client.get('$_url/location/$locationId/');
-
+      final response = await _client.get('/location/$locationId/');
       if (response.statusCode != 200) throw ServerException();
       return WeatherResponse.fromJson(response.data);
     } catch (e) {

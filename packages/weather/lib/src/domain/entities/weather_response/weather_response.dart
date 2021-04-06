@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:json_annotation/json_annotation.dart';
 
+import '../location_response/location_response.dart' show LocationResponse;
+
 part 'weather_response.g.dart';
 
 @JsonSerializable()
@@ -25,17 +27,34 @@ class WeatherResponse extends Equatable {
 
   Map<String, dynamic> toJson() => _$WeatherResponseToJson(this);
 
+  @JsonKey(name: 'consolidated_weather')
   final List<ConsolidatedWeather> consolidatedWeather;
+
   final DateTime time;
+
+  @JsonKey(name: 'sun_rise')
   final DateTime sunRise;
+
+  @JsonKey(name: 'sun_set')
   final DateTime sunSet;
+
+  @JsonKey(name: 'timezone_name')
   final String timezoneName;
-  final Parent parent;
+
+  final LocationResponse parent;
+
   final List<Source> sources;
+
   final String title;
+
+  @JsonKey(name: 'location_type')
   final String locationType;
+
   final int woeid;
+
+  @JsonKey(name: 'latt_long')
   final String lattLong;
+
   final String timezone;
 
   WeatherResponse copyWith({
@@ -44,7 +63,7 @@ class WeatherResponse extends Equatable {
     DateTime? sunRise,
     DateTime? sunSet,
     String? timezoneName,
-    Parent? parent,
+    LocationResponse? parent,
     List<Source>? sources,
     String? title,
     String? locationType,
@@ -110,19 +129,42 @@ class ConsolidatedWeather extends Equatable {
   Map<String, dynamic> toJson() => _$ConsolidatedWeatherToJson(this);
 
   final int id;
+
+  @JsonKey(name: 'weather_state_name')
   final String weatherStateName;
+
+  @JsonKey(name: 'weather_state_abbr')
   final String weatherStateAbbr;
+
+  @JsonKey(name: 'wind_direction_compass')
   final String windDirectionCompass;
   final DateTime created;
+
+  @JsonKey(name: 'applicable_date')
   final DateTime applicableDate;
+
+  @JsonKey(name: 'min_temp')
   final double minTemp;
+
+  @JsonKey(name: 'max_temp')
   final double maxTemp;
+
+  @JsonKey(name: 'the_temp')
   final double theTemp;
+
+  @JsonKey(name: 'wind_speed')
   final double windSpeed;
+
+  @JsonKey(name: 'wind_direction')
   final double windDirection;
+
+  @JsonKey(name: 'air_pressure')
   final double airPressure;
+
   final int humidity;
+
   final double visibility;
+
   final int predictability;
 
   ConsolidatedWeather copyWith({
@@ -181,46 +223,6 @@ class ConsolidatedWeather extends Equatable {
 }
 
 @JsonSerializable()
-class Parent extends Equatable {
-  Parent({
-    required this.title,
-    required this.locationType,
-    required this.woeid,
-    required this.lattLong,
-  });
-
-  factory Parent.fromJson(Map<String, dynamic> json) => _$ParentFromJson(json);
-
-  Map<String, dynamic> toJson() => _$ParentToJson(this);
-
-  final String title;
-  final String locationType;
-  final int woeid;
-  final String lattLong;
-
-  Parent copyWith({
-    String? title,
-    String? locationType,
-    int? woeid,
-    String? lattLong,
-  }) =>
-      Parent(
-        title: this.title,
-        locationType: this.locationType,
-        woeid: this.woeid,
-        lattLong: this.lattLong,
-      );
-
-  @override
-  List<Object> get props => [
-        title,
-        locationType,
-        woeid,
-        lattLong,
-      ];
-}
-
-@JsonSerializable()
 class Source extends Equatable {
   Source({
     required this.title,
@@ -236,6 +238,8 @@ class Source extends Equatable {
   final String title;
   final String slug;
   final String url;
+
+  @JsonKey(name: 'crawl_rate')
   final int crawlRate;
 
   Source copyWith({
