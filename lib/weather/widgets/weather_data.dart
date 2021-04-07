@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../weather/weather.dart';
 import '../extensions/temperature_extension.dart';
 
+const kDegrees = ['Celsius', 'Fahrenheit'];
+
 class WeatherData extends StatelessWidget {
   const WeatherData({
     Key? key,
@@ -16,46 +18,38 @@ class WeatherData extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final h3 = Theme.of(context).textTheme.headline3;
+    final theme = Theme.of(context);
+    final h3 = theme.textTheme.headline3;
+
     final temp = weather.consolidatedWeather.first.theTemp;
     final isCelsius = temperature == Temperature.celsius ? true : false;
 
-    return RefreshIndicator(
-      onRefresh: () => context.read<WeatherCubit>().getWeather(weather.woeid),
-      child: SingleChildScrollView(
-        physics: const AlwaysScrollableScrollPhysics(),
-        child: Column(
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text(
+          weather.title,
+          style: h3,
+          textAlign: TextAlign.center,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const SizedBox(height: 30),
             Text(
-              weather.title,
+              (isCelsius ? temp.celsius : temp.fahrenheit).toStringAsFixed(2),
               style: h3,
               textAlign: TextAlign.center,
             ),
-            const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  (isCelsius ? temp.celsius : temp.fahrenheit)
-                      .toStringAsFixed(2),
-                  style: h3,
-                  textAlign: TextAlign.center,
-                ),
-                Text(isCelsius ? 'C' : 'F', style: h3),
-              ],
-            ),
-            const SizedBox(height: 30),
-            Text(
-              weather.consolidatedWeather.first.weatherStateName,
-              style: h3,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 30),
-            Align(child: _TemperatureToggle(isCelsius: isCelsius)),
+            Text(isCelsius ? 'C' : 'F', style: h3),
           ],
         ),
-      ),
+        Text(
+          weather.consolidatedWeather.first.weatherStateName,
+          style: h3,
+          textAlign: TextAlign.center,
+        ),
+        Align(child: _TemperatureToggle(isCelsius: isCelsius)),
+      ],
     );
   }
 }
@@ -70,12 +64,11 @@ class _TemperatureToggle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final labels = ['Celsius', 'Fahrenheit'];
-
     return ToggleButtons(
+      selectedColor: Theme.of(context).accentColor,
       children: [
-        for (final label in labels)
-          Padding(padding: const EdgeInsets.all(12), child: Text(label))
+        for (final degree in kDegrees)
+          Padding(padding: const EdgeInsets.all(12), child: Text(degree))
       ],
       isSelected: [isCelsius, !isCelsius],
       onPressed: (index) {

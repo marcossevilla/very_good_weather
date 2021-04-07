@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:hive/hive.dart';
+
 import 'package:very_good_weather/app/app_config.dart';
 import 'package:very_good_weather/l10n/l10n.dart';
 import 'package:very_good_weather/search/search.dart';

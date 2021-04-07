@@ -22,7 +22,7 @@ class LocationsList extends StatelessWidget {
             onTap: () async {
               final woeid = location.woeid;
               unawaited(context.read<WeatherCubit>().getWeather(woeid));
-              await Navigator.of(context).push(WeatherPage.go());
+              await Navigator.of(context).push(WeatherPage.go(woeid));
             },
           ),
       ]),

@@ -6,7 +6,7 @@
     },
     "searchLocation": "Search a location...",
     "@searchLocation": {
-        "description": "Text shown in the search location TextField"
+        "description": "Text shown in the search location TextFormField"
     },
     "noLocations": "No locations yet!",
     "@noLocations": {
@@ -23,5 +23,9 @@
     "noWeather": "No weather available yet.",
     "@generalError": {
         "description": "Text shown in the WeatherPage initially when state loads, never seen unless getting weather is not called"
+    },
+    "writeSomething": "Come on, write something",
+    "@writeSomething": {
+        "description": "Text shown in the SearchPage when searching an empty string on TextFormField"
     }
 }

@@ -23,5 +23,9 @@
     "noWeather": "No hay clima disponible por ahora.",
     "@generalError": {
         "description": "Texto mostrado en WeatherPage inicialmente cuando el estado carga, se ve únicamente si no se llama getWeather"
+    },
+    "writeSomething": "Vamos, escribe algo",
+    "@writeSomething": {
+        "description": "Texto mostrado en SearchPage cuando se busca una cadena vacía en TextFormField"
     }
 }

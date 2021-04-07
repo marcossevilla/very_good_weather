@@ -19,11 +19,14 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  final formKey = GlobalKey<FormFieldState>();
   final textController = TextEditingController();
 
   void submitQuery() async {
-    final query = textController.text;
-    await context.read<SearchCubit>().searchLocation(query);
+    if (formKey.currentState!.validate()) {
+      final query = textController.text;
+      await context.read<SearchCubit>().searchLocation(query);
+    }
   }
 
   @override
@@ -33,11 +36,14 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(title: Text(l10n.searchLocation)),
+          SliverAppBar(title: Text(l10n.appName)),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),
-              child: TextField(controller: textController),
+              child: SearchField(
+                formKey: formKey,
+                textController: textController,
+              ),
             ),
           ),
           const SearchBody(),
@@ -45,7 +51,45 @@ class _SearchPageState extends State<SearchPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: submitQuery,
-        child: const Icon(Icons.search),
+        child: const Icon(Icons.search, color: Colors.white),
+      ),
+    );
+  }
+}
+
+class SearchField extends StatelessWidget {
+  const SearchField({
+    Key? key,
+    required this.formKey,
+    required this.textController,
+  }) : super(key: key);
+
+  final GlobalKey<FormFieldState> formKey;
+  final TextEditingController textController;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = context.l10n;
+    final theme = Theme.of(context);
+
+    return TextFormField(
+      key: formKey,
+      controller: textController,
+      validator: (value) => value!.isEmpty ? l10n.writeSomething : null,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey.shade200,
+        hintText: l10n.searchLocation,
+        enabledBorder: InputBorder.none,
+        errorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: theme.accentColor, width: 2),
+        ),
+        focusedErrorBorder: const OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.red, width: 2),
+        ),
       ),
     );
   }

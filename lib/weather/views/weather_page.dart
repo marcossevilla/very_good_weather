@@ -11,10 +11,15 @@ import '../widgets/widgets.dart';
 class WeatherPage extends StatelessWidget {
   const WeatherPage({
     Key? key,
+    required this.woeid,
   }) : super(key: key);
 
-  static Route go() {
-    return MaterialPageRoute<void>(builder: (_) => const WeatherPage());
+  final int woeid;
+
+  static Route go(int weatherId) {
+    return MaterialPageRoute<void>(
+      builder: (_) => WeatherPage(woeid: weatherId),
+    );
   }
 
   @override
@@ -33,6 +38,10 @@ class WeatherPage extends StatelessWidget {
             error: (error) => Center(child: Text(error ?? l10n.generalError)),
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.refresh, color: Colors.white),
+        onPressed: () => context.read<WeatherCubit>().getWeather(woeid),
       ),
     );
   }
