@@ -11,17 +11,17 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hive/hive.dart';
 import 'package:very_good_weather/app/app.dart';
 import 'package:very_good_weather/app/app_config.dart';
-import 'package:very_good_weather/weather/weather.dart';
+import 'package:very_good_weather/search/search.dart';
 
 void main() {
   group('App', () {
-    testWidgets('renders WeatherPage', (tester) async {
+    testWidgets('renders SearchPage', (tester) async {
       final path = Directory.current.path;
       Hive.init(path);
       final appBox = await Hive.openBox(AppConfig.appBox);
 
       await tester.pumpWidget(App(box: appBox));
-      expect(find.byType(WeatherPage), findsOneWidget);
+      expect(find.byType(SearchPage), findsOneWidget);
     });
   });
 }

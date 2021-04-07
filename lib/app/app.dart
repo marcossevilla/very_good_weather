@@ -30,7 +30,7 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider(
           create: (_) => WeatherRepository(
-            localDataSource: WeatherLocalDataSource(prefs: box),
+            localDataSource: WeatherLocalDataSource(db: box),
             remoteDataSource: WeatherRemoteDataSource(
               client: Dio(BaseOptions(baseUrl: AppConfig.apiUrl)),
             ),
