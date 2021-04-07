@@ -1,7 +1,27 @@
 {
     "@@locale": "es",
-    "counterAppBarTitle": "Contador",
-    "@counterAppBarTitle": {
-        "description": "Texto mostrado en la AppBar de la página del contador"
+    "appName": "Muy buen clima",
+    "@appName": {
+        "description": "Nombre del app"
+    },
+    "searchLocation": "Busca un lugar...",
+    "@searchLocation": {
+        "description": "Texto mostrado en el TextField de buscar ubicación"
+    },
+    "noLocations": "¡No hay lugares aún!",
+    "@noLocations": {
+        "description": "Texto mostrado en el estado inicial del feature de búsqueda"
+    },
+    "generalError": "¡Ups, algo salió mal!",
+    "@generalError": {
+        "description": "Texto mostrado comunmente si ocurre un error no especificado"
+    },
+    "forecastIntro": "El pronóstico es...",
+    "@forecastIntro": {
+        "description": "Texto mostrado en WeatherPage para introducir el clima solicitado"
+    },
+    "noWeather": "No hay clima disponible por ahora.",
+    "@generalError": {
+        "description": "Texto mostrado en WeatherPage inicialmente cuando el estado carga, se ve únicamente si no se llama getWeather"
     }
 }

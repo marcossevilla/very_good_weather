@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:very_good_weather/search/cubit/search_cubit.dart';
+import 'package:very_good_weather/l10n/l10n.dart';
+
+import '../cubit/search_cubit.dart';
 import '../widgets/widgets.dart';
 
 class SearchPage extends StatefulWidget {
@@ -26,10 +28,12 @@ class _SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          const SliverAppBar(title: Text('Input a location')),
+          SliverAppBar(title: Text(l10n.searchLocation)),
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.all(20),
@@ -54,17 +58,15 @@ class SearchBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
+
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (_, state) {
         return state.when(
-          initial: () => const SliverText(
-            message: 'Search for some locations!',
-          ),
+          initial: () => SliverText(message: l10n.noLocations),
           loading: () => const SliverLoader(),
           loaded: (locations) => LocationsList(locations: locations),
-          error: (error) => SliverText(
-            message: error ?? 'Oops, something went wrong!',
-          ),
+          error: (error) => SliverText(message: error ?? l10n.generalError),
         );
       },
     );

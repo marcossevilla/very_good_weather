@@ -1,7 +1,27 @@
 {
     "@@locale": "en",
-    "counterAppBarTitle": "Counter",
-    "@counterAppBarTitle": {
-        "description": "Text shown in the AppBar of the Counter Page"
+    "appName": "Very Good Weather",
+    "@appName": {
+        "description": "Name of the app"
+    },
+    "searchLocation": "Search a location...",
+    "@searchLocation": {
+        "description": "Text shown in the search location TextField"
+    },
+    "noLocations": "No locations yet!",
+    "@noLocations": {
+        "description": "Text shown in the search feature initial state"
+    },
+    "generalError": "Oops, something went wrong!",
+    "@generalError": {
+        "description": "Text shown commonly if an unspecified error occurs"
+    },
+    "forecastIntro": "The forecast is...",
+    "@forecastIntro": {
+        "description": "Text shown in the WeatherPage to introduce the forecast for the requested weather"
+    },
+    "noWeather": "No weather available yet.",
+    "@generalError": {
+        "description": "Text shown in the WeatherPage initially when state loads, never seen unless getting weather is not called"
     }
 }

@@ -20,7 +20,7 @@ class SearchCubit extends Cubit<SearchState> {
 
     emit(
       result.fold(
-        (error) => const SearchState.error(),
+        (_) => const SearchState.error(),
         (locations) => SearchState.loaded(locations),
       ),
     );
