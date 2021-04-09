@@ -18,7 +18,7 @@ void main() {
 
   setUp(() {
     database = MockDatabase();
-    dataSource = WeatherLocalDataSource(db: database);
+    dataSource = WeatherLocalDataSource(box: database);
   });
 
   final weatherFixture = fixture('weather_fixture.json');
@@ -31,11 +31,13 @@ void main() {
     test(
       'should return WeatherResponse from database if it\'s there',
       () async {
-        when(database.get(any)).thenReturn(weatherFixture);
+        when(
+          () => database.get(any()),
+        ).thenReturn((_) => weatherFixture);
 
         final result = await dataSource.getCachedWeather();
 
-        verify(database.get(kCachedBoxKey));
+        verify(database.get(kCachedBoxKey)).called(1);
 
         expect(result, equals(tWeatherResponse));
       },
@@ -44,11 +46,12 @@ void main() {
     test(
       'should throw CacheException when there\'s no cached weather',
       () {
-        when(database.get(any)).thenReturn(null);
+        when(() => database.get(any())).thenReturn(null);
 
-        final call = dataSource.getCachedWeather;
-
-        expect(call, throwsA(isA<CacheException>()));
+        expect(
+          () async => await dataSource.getCachedWeather(),
+          throwsA(isA<CacheException>()),
+        );
       },
     );
   });

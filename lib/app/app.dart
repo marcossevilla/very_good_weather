@@ -30,20 +30,20 @@ class App extends StatelessWidget {
       providers: [
         RepositoryProvider(
           create: (_) => WeatherRepository(
-            localDataSource: WeatherLocalDataSource(db: box),
+            localDataSource: WeatherLocalDataSource(box: box),
             remoteDataSource: WeatherRemoteDataSource(
               client: Dio(BaseOptions(baseUrl: AppConfig.apiUrl)),
             ),
           ),
         ),
       ],
-      child: const AppMultiBloc(),
+      child: const _AppBloc(),
     );
   }
 }
 
-class AppMultiBloc extends StatelessWidget {
-  const AppMultiBloc({Key? key}) : super(key: key);
+class _AppBloc extends StatelessWidget {
+  const _AppBloc({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +64,13 @@ class AppMultiBloc extends StatelessWidget {
           ),
         ),
       ],
-      child: const AppCore(),
+      child: const _AppCore(),
     );
   }
 }
 
-class AppCore extends StatelessWidget {
-  const AppCore({
+class _AppCore extends StatelessWidget {
+  const _AppCore({
     Key? key,
   }) : super(key: key);
 

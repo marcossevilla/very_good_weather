@@ -32,10 +32,20 @@ class WeatherPage extends StatelessWidget {
         buildWhen: (previous, current) => current != previous,
         builder: (_, state) {
           return state.when(
-            initial: () => Center(child: Text(l10n.noWeather)),
+            initial: () => Center(
+              child: Text(
+                l10n.noWeather,
+                key: const Key('weatherPage_noWeatherText'),
+              ),
+            ),
             loading: () => const Center(child: CircularProgressIndicator()),
             loaded: (w, t) => WeatherData(weather: w, temperature: t),
-            error: (error) => Center(child: Text(error ?? l10n.generalError)),
+            error: (error) => Center(
+              child: Text(
+                error ?? l10n.generalError,
+                key: const Key('weatherPage_errorWeatherText'),
+              ),
+            ),
           );
         },
       ),

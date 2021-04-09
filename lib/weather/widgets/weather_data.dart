@@ -72,7 +72,7 @@ class _TemperatureToggle extends StatelessWidget {
       ],
       isSelected: [isCelsius, !isCelsius],
       onPressed: (index) {
-        var temp = index == 0 ? Temperature.celsius : Temperature.fahrenheit;
+        final temp = index == 0 ? Temperature.celsius : Temperature.fahrenheit;
         context.read<WeatherCubit>().changeTemperature(temp);
       },
     );

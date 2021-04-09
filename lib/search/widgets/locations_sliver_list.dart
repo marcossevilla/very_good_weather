@@ -19,10 +19,11 @@ class LocationsList extends StatelessWidget {
         for (final location in locations)
           ListTile(
             title: Text(location.title),
+            subtitle: Text(location.lattLong),
             onTap: () async {
-              final woeid = location.woeid;
-              unawaited(context.read<WeatherCubit>().getWeather(woeid));
-              await Navigator.of(context).push(WeatherPage.go(woeid));
+              final id = location.woeid;
+              unawaited(context.read<WeatherCubit>().getWeather(id));
+              await Navigator.of(context).push(WeatherPage.go(id));
             },
           ),
       ]),

@@ -14,19 +14,19 @@ abstract class IWeatherLocalDataSource {
 
 class WeatherLocalDataSource implements IWeatherLocalDataSource {
   WeatherLocalDataSource({
-    required Box db,
-  }) : _db = db;
+    required Box box,
+  }) : _box = box;
 
-  final Box _db;
+  final Box _box;
 
   @override
   Future<void> cacheWeather(WeatherResponse weatherResponse) {
-    return _db.put(kCachedBoxKey, json.encode(weatherResponse.toJson()));
+    return _box.put(kCachedBoxKey, json.encode(weatherResponse.toJson()));
   }
 
   @override
-  Future<WeatherResponse> getCachedWeather() {
-    final jsonStr = _db.get(kCachedBoxKey);
+  Future<WeatherResponse> getCachedWeather() async {
+    final jsonStr = _box.get(kCachedBoxKey);
 
     if (jsonStr != null) {
       final trivia = WeatherResponse.fromJson(json.decode(jsonStr));
