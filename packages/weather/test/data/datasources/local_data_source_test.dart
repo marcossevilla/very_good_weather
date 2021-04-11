@@ -33,11 +33,11 @@ void main() {
       () async {
         when(
           () => database.get(any()),
-        ).thenReturn((_) => weatherFixture);
+        ).thenReturn(weatherFixture);
 
-        final result = await dataSource.getCachedWeather();
+        final result = dataSource.getCachedWeather();
 
-        verify(database.get(kCachedBoxKey)).called(1);
+        verify(() => database.get(kCachedBoxKey)).called(1);
 
         expect(result, equals(tWeatherResponse));
       },
@@ -49,7 +49,7 @@ void main() {
         when(() => database.get(any())).thenReturn(null);
 
         expect(
-          () async => await dataSource.getCachedWeather(),
+          () => dataSource.getCachedWeather(),
           throwsA(isA<CacheException>()),
         );
       },
@@ -64,7 +64,12 @@ void main() {
 
         final expectedJson = json.encode(tWeatherResponse.toJson());
 
-        verify(() async => await database.put(kCachedBoxKey, expectedJson));
+        verify(
+          () async => await database.put(
+            kCachedBoxKey,
+            json.encode(expectedJson),
+          ),
+        );
       },
     );
   });

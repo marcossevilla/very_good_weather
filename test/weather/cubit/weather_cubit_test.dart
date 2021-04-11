@@ -1,9 +1,9 @@
 import 'package:bloc_test/bloc_test.dart';
+import 'package:dartz/dartz.dart';
+import 'package:errors/errors.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:very_good_weather/weather/weather.dart';
-import 'package:errors/errors.dart';
-import 'package:dartz/dartz.dart';
 
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
@@ -30,7 +30,7 @@ void main() {
   );
 
   group(
-    'SearchCubit',
+    'WeatherCubit',
     () {
       blocTest<WeatherCubit, WeatherState>(
         'get weather error flow',

@@ -8,7 +8,7 @@ import '../../../domain/domain.dart' show WeatherResponse;
 const kCachedBoxKey = 'WEATHER_CACHE';
 
 abstract class IWeatherLocalDataSource {
-  Future<WeatherResponse> getCachedWeather();
+  WeatherResponse getCachedWeather();
   Future<void> cacheWeather(WeatherResponse weatherResponse);
 }
 
@@ -20,17 +20,17 @@ class WeatherLocalDataSource implements IWeatherLocalDataSource {
   final Box _box;
 
   @override
-  Future<void> cacheWeather(WeatherResponse weatherResponse) {
-    return _box.put(kCachedBoxKey, json.encode(weatherResponse.toJson()));
+  Future<void> cacheWeather(WeatherResponse weatherResponse) async {
+    await _box.put(kCachedBoxKey, json.encode(weatherResponse.toJson()));
   }
 
   @override
-  Future<WeatherResponse> getCachedWeather() async {
+  WeatherResponse getCachedWeather() {
     final jsonStr = _box.get(kCachedBoxKey);
 
     if (jsonStr != null) {
       final trivia = WeatherResponse.fromJson(json.decode(jsonStr));
-      return Future.value(trivia);
+      return trivia;
     } else {
       throw CacheException();
     }

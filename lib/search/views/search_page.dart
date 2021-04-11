@@ -107,10 +107,16 @@ class SearchBody extends StatelessWidget {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (_, state) {
         return state.when(
-          initial: () => SliverText(message: l10n.noLocations),
+          initial: () => SliverText(
+            key: const Key('searchPage_noLocationsText'),
+            message: l10n.noLocations,
+          ),
           loading: () => const SliverLoader(),
           loaded: (locations) => LocationsList(locations: locations),
-          error: (error) => SliverText(message: error ?? l10n.generalError),
+          error: (error) => SliverText(
+            key: const Key('searchPage_errorSearchText'),
+            message: error ?? l10n.generalError,
+          ),
         );
       },
     );

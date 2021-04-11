@@ -39,7 +39,7 @@ class WeatherRepository implements IWeatherRepository {
       return Right(weather);
     } catch (e) {
       try {
-        final weather = await _localDataSource.getCachedWeather();
+        final weather = _localDataSource.getCachedWeather();
         return Right(weather);
       } catch (e) {
         return Left(ServerFailure());

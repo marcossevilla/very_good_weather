@@ -10,8 +10,6 @@ import 'package:very_good_weather/weather/weather.dart';
 import '../../fixtures/fixture_adapter.dart';
 import '../../helpers/pump_app.dart';
 
-class MockWeather extends Mock implements WeatherResponse {}
-
 class MockWeatherRepository extends Mock implements WeatherRepository {}
 
 class MockWeatherCubit extends MockCubit<WeatherState> implements WeatherCubit {

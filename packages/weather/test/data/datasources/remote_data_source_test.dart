@@ -1,74 +1,59 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:errors/errors.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import 'package:errors/errors.dart';
-import 'package:weather/src/domain/enums/location_type.dart';
 import 'package:weather/weather.dart';
 
 import '../../fixtures/fixture_adapter.dart';
 
 class MockDioClient extends Mock implements Dio {}
 
+class MockResponse extends Mock implements Response {}
+
 void main() {
-  late MockDioClient client;
+  late Dio client;
+  late Response response;
   late WeatherRemoteDataSource dataSource;
 
-  final fixtureStr = fixture('weather_fixture.json');
   final tWeatherResponse = WeatherResponse.fromJson(
-    json.decode(fixtureStr),
+    json.decode(fixture('weather_fixture.json')),
   );
+
+  final tLocations = json.decode(fixture('location_fixture.json')) as List;
+
+  final tLocationResponse = <LocationResponse>[];
+
+  for (final location in tLocations) {
+    tLocationResponse.add(LocationResponse.fromJson(location));
+  }
 
   setUp(() {
     client = MockDioClient();
+    response = MockResponse();
     dataSource = WeatherRemoteDataSource(client: client);
   });
 
-  void setUpHttpClientSuccess() {
-    when(() => client.get(any())).thenAnswer(
-      (_) async => Response(
-        statusCode: 200,
-        requestOptions: RequestOptions(path: ''),
-      ),
-    );
+  void setUpClientSuccess(Object data) {
+    when(() => response.statusCode).thenReturn(200);
+    when(() => response.data).thenReturn(data);
+    when(() async => client.get(any())).thenAnswer((_) async => response);
   }
 
-  void setUpHttpClientFailure() {
-    when(() => client.get(any())).thenAnswer(
-      (_) async => Response(
-        statusCode: 404,
-        requestOptions: RequestOptions(path: ''),
-      ),
-    );
+  void setUpClientFailure() {
+    when(() => response.statusCode).thenReturn(400);
+    when(() async => await client.get(any())).thenAnswer((_) async => response);
   }
-
-  final tLocationResponse = LocationResponse(
-    woeid: 0,
-    title: 'Managua',
-    lattLong: '0201',
-    locationType: LocationType.city,
-  );
 
   group('searchLocation', () {
-    final tQuery = 'managua';
+    final tQuery = 'man';
 
     test(
-      'should perform a GET request on with query as a queryParam',
+      'should return LocationResponse when response code is 200',
       () async {
-        setUpHttpClientSuccess();
-
-        await dataSource.searchLocation(tQuery);
-
-        verify(() => client.get('path', queryParameters: {'query': tQuery}));
-      },
-    );
-
-    test(
-      'should return WeatherResponse when  response code is 200',
-      () async {
-        setUpHttpClientSuccess();
+        setUpClientSuccess(tLocations);
 
         final result = await dataSource.searchLocation(tQuery);
 
@@ -79,7 +64,7 @@ void main() {
     test(
       'should throw a ServerException when the response code is 404 or other',
       () async {
-        setUpHttpClientFailure();
+        setUpClientFailure();
 
         expect(
           () async => await dataSource.searchLocation(tQuery),
@@ -91,34 +76,23 @@ void main() {
 
   group('getWeather', () {
     test(
-      'should perform a GET request on location endpoint',
-      () async {
-        setUpHttpClientSuccess();
-
-        await dataSource.getWeather(tLocationResponse.woeid);
-        // assert
-        verify(() async => await client.get('/location/search/'));
-      },
-    );
-
-    test(
       'should return WeatherResponse when the response code is 200',
       () async {
-        setUpHttpClientSuccess();
+        setUpClientSuccess(tWeatherResponse);
 
-        final result = await dataSource.getWeather(tLocationResponse.woeid);
+        final result = await dataSource.getWeather(tLocations.first.woeid);
 
-        expect(() => result, equals(tWeatherResponse));
+        expect(result, equals(tWeatherResponse));
       },
     );
 
     test(
       'should throw a ServerException when the response code is 404 or other',
       () async {
-        setUpHttpClientFailure();
+        setUpClientFailure();
 
         expect(
-          () => dataSource.getWeather(tLocationResponse.woeid),
+          () async => await dataSource.getWeather(tLocations.first.woeid),
           throwsA(isA<ServerException>()),
         );
       },
