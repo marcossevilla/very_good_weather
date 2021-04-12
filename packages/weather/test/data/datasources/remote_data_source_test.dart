@@ -11,11 +11,8 @@ import '../../fixtures/fixture_adapter.dart';
 
 class MockDioClient extends Mock implements Dio {}
 
-class MockResponse extends Mock implements Response {}
-
 void main() {
   late Dio client;
-  late Response response;
   late WeatherRemoteDataSource dataSource;
 
   // test variables
@@ -24,7 +21,6 @@ void main() {
 
   setUp(() {
     client = MockDioClient();
-    response = MockResponse();
     dataSource = WeatherRemoteDataSource(client: client);
 
     tLocationResponse = List<LocationResponse>.from(
@@ -38,15 +34,28 @@ void main() {
     );
   });
 
-  void setUpClientSuccess(Object data) {
-    when(() => response.statusCode).thenReturn(200);
-    when(() => response.data).thenReturn(data);
-    when(() async => client.get(any())).thenAnswer((_) async => response);
+  void setUpClientSuccess(String data) {
+    when(
+      () => client.get(
+        any(),
+        queryParameters: any(named: 'queryParameters'),
+      ),
+    ).thenAnswer(
+      (_) async => Response(
+        requestOptions: RequestOptions(path: ''),
+        data: json.decode(data),
+        statusCode: 200,
+      ),
+    );
   }
 
   void setUpClientFailure() {
-    when(() => response.statusCode).thenReturn(400);
-    when(() async => await client.get(any())).thenAnswer((_) async => response);
+    when(() => client.get(any())).thenAnswer(
+      (_) async => Response(
+        requestOptions: RequestOptions(path: ''),
+        statusCode: 400,
+      ),
+    );
   }
 
   group('searchLocation', () {
@@ -55,11 +64,11 @@ void main() {
     test(
       'should return LocationResponse when response code is 200',
       () async {
-        setUpClientSuccess(tLocationResponse);
+        setUpClientSuccess(fixture('location_fixture.json'));
 
         final result = await dataSource.searchLocation(tQuery);
 
-        expect(() => result, equals(tLocationResponse));
+        expect(result, equals(tLocationResponse));
       },
     );
 
@@ -80,7 +89,7 @@ void main() {
     test(
       'should return WeatherResponse when the response code is 200',
       () async {
-        setUpClientSuccess(tWeatherResponse);
+        setUpClientSuccess(fixture('weather_fixture.json'));
 
         final result = await dataSource.getWeather(
           tLocationResponse.first.woeid,
