@@ -18,22 +18,24 @@ void main() {
   late Response response;
   late WeatherRemoteDataSource dataSource;
 
-  final tWeatherResponse = WeatherResponse.fromJson(
-    json.decode(fixture('weather_fixture.json')),
-  );
-
-  final tLocations = json.decode(fixture('location_fixture.json')) as List;
-
-  final tLocationResponse = <LocationResponse>[];
-
-  for (final location in tLocations) {
-    tLocationResponse.add(LocationResponse.fromJson(location));
-  }
+  // test variables
+  late List<LocationResponse> tLocationResponse;
+  late WeatherResponse tWeatherResponse;
 
   setUp(() {
     client = MockDioClient();
     response = MockResponse();
     dataSource = WeatherRemoteDataSource(client: client);
+
+    tLocationResponse = List<LocationResponse>.from(
+      json
+          .decode(fixture('location_fixture.json'))
+          .map((x) => LocationResponse.fromJson(x)),
+    );
+
+    tWeatherResponse = WeatherResponse.fromJson(
+      json.decode(fixture('weather_fixture.json')),
+    );
   });
 
   void setUpClientSuccess(Object data) {
@@ -53,7 +55,7 @@ void main() {
     test(
       'should return LocationResponse when response code is 200',
       () async {
-        setUpClientSuccess(tLocations);
+        setUpClientSuccess(tLocationResponse);
 
         final result = await dataSource.searchLocation(tQuery);
 
@@ -80,7 +82,9 @@ void main() {
       () async {
         setUpClientSuccess(tWeatherResponse);
 
-        final result = await dataSource.getWeather(tLocations.first.woeid);
+        final result = await dataSource.getWeather(
+          tLocationResponse.first.woeid,
+        );
 
         expect(result, equals(tWeatherResponse));
       },
@@ -92,7 +96,7 @@ void main() {
         setUpClientFailure();
 
         expect(
-          () async => await dataSource.getWeather(tLocations.first.woeid),
+          () => dataSource.getWeather(tLocationResponse.first.woeid),
           throwsA(isA<ServerException>()),
         );
       },

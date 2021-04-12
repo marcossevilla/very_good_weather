@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 
 import 'package:errors/errors.dart';
 import 'package:hive/hive.dart';
@@ -60,16 +61,15 @@ void main() {
     test(
       'should cache weather by inserting it in database',
       () async {
+        when(
+          () => database.put(any(), any()),
+        ).thenAnswer((_) async => Void);
+
         await dataSource.cacheWeather(tWeatherResponse);
 
         final expectedJson = json.encode(tWeatherResponse.toJson());
 
-        verify(
-          () async => await database.put(
-            kCachedBoxKey,
-            json.encode(expectedJson),
-          ),
-        );
+        verify(() => database.put(kCachedBoxKey, expectedJson));
       },
     );
   });
