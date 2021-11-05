@@ -85,7 +85,7 @@ class SearchField extends StatelessWidget {
           borderSide: BorderSide(color: Colors.red, width: 2),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: theme.accentColor, width: 2),
+          borderSide: BorderSide(color: theme.colorScheme.secondary, width: 2),
         ),
         focusedErrorBorder: const OutlineInputBorder(
           borderSide: BorderSide(color: Colors.red, width: 2),
@@ -106,18 +106,25 @@ class SearchBody extends StatelessWidget {
 
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (_, state) {
-        return state.when(
-          initial: () => SliverText(
+        if (state is SearchInitial) {
+          return SliverText(
             key: const Key('searchPage_noLocationsText'),
             message: l10n.noLocations,
-          ),
-          loading: () => const SliverLoader(),
-          loaded: (locations) => LocationsList(locations: locations),
-          error: (error) => SliverText(
+          );
+        }
+
+        if (state is SearchLoaded) {
+          return LocationsList(locations: state.locations);
+        }
+
+        if (state is SearchError) {
+          return SliverText(
             key: const Key('searchPage_errorSearchText'),
-            message: error ?? l10n.generalError,
-          ),
-        );
+            message: state.error ?? l10n.generalError,
+          );
+        }
+
+        return const SliverLoader();
       },
     );
   }

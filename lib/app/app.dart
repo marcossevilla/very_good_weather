@@ -5,80 +5,52 @@
 // license that can be found in the LICENSE file or at
 // https://opensource.org/licenses/MIT.
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:hive/hive.dart';
-
-import 'package:very_good_weather/app/app_config.dart';
 import 'package:very_good_weather/l10n/l10n.dart';
 import 'package:very_good_weather/search/search.dart';
 import 'package:very_good_weather/weather/weather.dart';
+import 'package:weather_repository/weather_repository.dart';
 
 class App extends StatelessWidget {
   const App({
     Key? key,
-    required this.box,
-  }) : super(key: key);
+    required WeatherRepository weatherRepository,
+  })  : _weatherRepository = weatherRepository,
+        super(key: key);
 
-  final Box box;
+  final WeatherRepository _weatherRepository;
 
   @override
   Widget build(BuildContext context) {
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(
-          create: (_) => WeatherRepository(
-            localDataSource: WeatherLocalDataSource(box: box),
-            remoteDataSource: WeatherRemoteDataSource(
-              client: Dio(BaseOptions(baseUrl: AppConfig.apiUrl)),
-            ),
-          ),
-        ),
+        RepositoryProvider.value(value: _weatherRepository),
       ],
-      child: const _AppBloc(),
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (_) => SearchCubit(weatherRepository: _weatherRepository),
+          ),
+          BlocProvider(
+            create: (_) => WeatherCubit(weatherRepository: _weatherRepository),
+          ),
+        ],
+        child: const AppView(),
+      ),
     );
   }
 }
 
-class _AppBloc extends StatelessWidget {
-  const _AppBloc({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) => SearchCubit(
-            searchLocation: SearchLocation(
-              repository: context.read<WeatherRepository>(),
-            ),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => WeatherCubit(
-            getWeather: GetWeather(
-              repository: context.read<WeatherRepository>(),
-            ),
-          ),
-        ),
-      ],
-      child: const _AppCore(),
-    );
-  }
-}
-
-class _AppCore extends StatelessWidget {
-  const _AppCore({
-    Key? key,
-  }) : super(key: key);
+class AppView extends StatelessWidget {
+  const AppView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        accentColor: const Color(0xFF13B9FF),
+        colorScheme: const ColorScheme.light(secondary: Color(0xFF13B9FF)),
         appBarTheme: const AppBarTheme(color: Color(0xFF13B9FF)),
       ),
       localizationsDelegates: [

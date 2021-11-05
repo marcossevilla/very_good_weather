@@ -2,16 +2,39 @@ part of 'weather_cubit.dart';
 
 enum Temperature { celsius, fahrenheit }
 
-@freezed
-class WeatherState with _$WeatherState {
-  const factory WeatherState.initial() = _Initial;
+abstract class WeatherState extends Equatable {
+  const WeatherState();
 
-  const factory WeatherState.loading() = _Loading;
+  @override
+  List<Object?> get props => [];
+}
 
-  const factory WeatherState.loaded(
-    WeatherResponse weather,
-    Temperature temperature,
-  ) = _Loaded;
+class WeatherInitial extends WeatherState {
+  const WeatherInitial();
+}
 
-  const factory WeatherState.error([String? message]) = _Error;
+class WeatherLoading extends WeatherState {
+  const WeatherLoading();
+}
+
+class WeatherLoaded extends WeatherState {
+  const WeatherLoaded({
+    required this.weather,
+    this.temperature = Temperature.celsius,
+  });
+
+  final WeatherResponse weather;
+  final Temperature temperature;
+
+  @override
+  List<Object?> get props => [weather];
+}
+
+class WeatherError extends WeatherState {
+  const WeatherError({this.error});
+
+  final String? error;
+
+  @override
+  List<Object?> get props => [error];
 }

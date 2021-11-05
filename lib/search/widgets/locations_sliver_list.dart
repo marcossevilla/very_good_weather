@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pedantic/pedantic.dart';
 import 'package:very_good_weather/weather/weather.dart';
-import 'package:weather/weather.dart';
 
 class LocationsList extends StatelessWidget {
   const LocationsList({

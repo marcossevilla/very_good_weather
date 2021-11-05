@@ -1,38 +1,38 @@
 import 'package:bloc/bloc.dart';
-import 'package:flutter/material.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:weather/weather.dart';
+import 'package:equatable/equatable.dart';
+import 'package:weather_api/weather_api.dart';
+import 'package:weather_repository/weather_repository.dart';
 
 part 'weather_state.dart';
-part 'weather_cubit.freezed.dart';
 
 class WeatherCubit extends Cubit<WeatherState> {
   WeatherCubit({
-    required GetWeather getWeather,
-  })   : _getWeather = getWeather,
-        super(const WeatherState.initial());
+    required WeatherRepository weatherRepository,
+  })  : _weatherRepository = weatherRepository,
+        super(const WeatherInitial());
 
-  final GetWeather _getWeather;
+  final WeatherRepository _weatherRepository;
 
   Future<void> getWeather(int locationId) async {
-    emit(const WeatherState.loading());
+    emit(const WeatherLoading());
 
-    final result = await _getWeather(locationId);
-
-    emit(
-      result.fold(
-        (error) => const WeatherState.error(),
-        (weather) => WeatherState.loaded(weather, Temperature.celsius),
-      ),
-    );
+    try {
+      final weather = await _weatherRepository.getWeather(locationId);
+      emit(WeatherLoaded(weather: weather));
+    } catch (e) {
+      emit(WeatherError(error: e.toString()));
+    }
   }
 
   void changeTemperature(Temperature temperature) {
-    emit(
-      state.maybeWhen(
-        loaded: (weather, _) => WeatherState.loaded(weather, temperature),
-        orElse: () => state,
-      ),
-    );
+    final _state = state;
+    if (_state is WeatherLoaded) {
+      emit(
+        WeatherLoaded(
+          weather: _state.weather,
+          temperature: temperature,
+        ),
+      );
+    }
   }
 }

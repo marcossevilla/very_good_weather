@@ -8,27 +8,32 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:flutter/widgets.dart';
 import 'package:bloc/bloc.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:flutter/widgets.dart';
 import 'package:very_good_weather/app/app.dart';
 import 'package:very_good_weather/app/app_bloc_observer.dart';
-
 import 'app/app_config.dart';
 
-void main() async {
+Future<void> main() async {
   Bloc.observer = AppBlocObserver();
   FlutterError.onError = (details) {
     log(details.exceptionAsString(), stackTrace: details.stack);
   };
 
+  final weatherApi = WeatherApi(
+    client: Dio(
+      BaseOptions(
+        baseUrl: AppConfig.apiUrl,
+      ),
+    ),
+  );
+
+  final weatherRepository = WeatherRepository(weatherApi: weatherApi);
+
   await runZonedGuarded(
-    () async {
-      await Hive.initFlutter();
-      final appBox = await Hive.openBox(AppConfig.appBox);
-      runApp(App(box: appBox));
-    },
+    () async => runApp(
+      App(weatherRepository: weatherRepository),
+    ),
     (error, stackTrace) => log(error.toString(), stackTrace: stackTrace),
   );
 }

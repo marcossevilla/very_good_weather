@@ -65,7 +65,7 @@ class _TemperatureToggle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ToggleButtons(
-      selectedColor: Theme.of(context).accentColor,
+      selectedColor: Theme.of(context).colorScheme.secondary,
       children: [
         for (final degree in kDegrees)
           Padding(padding: const EdgeInsets.all(12), child: Text(degree))

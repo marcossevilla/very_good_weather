@@ -1,28 +1,27 @@
 import 'package:bloc/bloc.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:very_good_weather/weather/weather.dart';
+import 'package:equatable/equatable.dart';
+
+import 'package:weather_api/weather_api.dart';
+import 'package:weather_repository/weather_repository.dart';
 
 part 'search_state.dart';
-part 'search_cubit.freezed.dart';
 
 class SearchCubit extends Cubit<SearchState> {
   SearchCubit({
-    required SearchLocation searchLocation,
-  })   : _search = searchLocation,
-        super(const SearchState.initial());
+    required WeatherRepository weatherRepository,
+  })  : _weatherRepository = weatherRepository,
+        super(const SearchInitial());
 
-  final SearchLocation _search;
+  final WeatherRepository _weatherRepository;
 
   Future<void> searchLocation(String query) async {
-    emit(const SearchState.loading());
+    emit(const SearchLoading());
 
-    final result = await _search(query);
-
-    emit(
-      result.fold(
-        (_) => const SearchState.error(),
-        (locations) => SearchState.loaded(locations),
-      ),
-    );
+    try {
+      final locations = await _weatherRepository.searchLocation(query);
+      emit(SearchLoaded(locations));
+    } catch (e) {
+      emit(SearchError(error: e.toString()));
+    }
   }
 }

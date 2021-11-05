@@ -1,12 +1,34 @@
 part of 'search_cubit.dart';
 
-@freezed
-class SearchState with _$SearchState {
-  const factory SearchState.initial() = _Initial;
+abstract class SearchState extends Equatable {
+  const SearchState();
 
-  const factory SearchState.loading() = _Loading;
+  @override
+  List<Object?> get props => [];
+}
 
-  const factory SearchState.loaded(List<LocationResponse> locations) = _Loaded;
+class SearchInitial extends SearchState {
+  const SearchInitial();
+}
 
-  const factory SearchState.error([String? message]) = _Error;
+class SearchLoading extends SearchState {
+  const SearchLoading();
+}
+
+class SearchLoaded extends SearchState {
+  const SearchLoaded(this.locations);
+
+  final List<LocationResponse> locations;
+
+  @override
+  List<Object?> get props => [locations];
+}
+
+class SearchError extends SearchState {
+  const SearchError({this.error});
+
+  final String? error;
+
+  @override
+  List<Object?> get props => [error];
 }
